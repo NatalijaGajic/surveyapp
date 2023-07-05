@@ -2,7 +2,7 @@
 import numpy as np
 
 from django.conf import settings
-from .data_service import DataService
+from shared.services.data_service import DataService
 
 def create_survey_for_user(user_code):
     data_service = DataService()

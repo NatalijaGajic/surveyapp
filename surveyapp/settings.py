@@ -21,7 +21,7 @@ CONVERSATIONS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\conversations')
 CONVERSATIONS_PATH = os.path.join(BASE_DIR, r'surveyapp\data\all_conversations.xlsx')
 USERS_SURVEYS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\users_surveys')
 
-SECRET_KEY = 'django-insecure-^li!)fneebn#)=-7(=kez&vaqp2%31ax$963t=!r^o$mp=3vi@'
+SECRET_KEY = env.str('SECRET_KEY')
 
 DEBUG = True
 
@@ -31,8 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'survey',
     'user'
@@ -42,7 +40,6 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -64,6 +61,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'surveyapp.wsgi.application'
 
