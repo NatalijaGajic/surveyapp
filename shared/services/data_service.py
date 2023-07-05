@@ -15,4 +15,11 @@ class DataService():
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(code)
         user_survey_df.to_excel(file_path, engine='xlsxwriter')
 
+    def add_user(self, user_data):
+        users_df = pd.read_excel(settings.USERS_PATH)
+        index = len(users_df.index)
+        user_data.insert(0, index)
+        users_df.loc[index] = user_data
+        users_df.to_excel(settings.USERS_PATH)
+
 

@@ -19,6 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 CONVERSATIONS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\conversations')
 CONVERSATIONS_PATH = os.path.join(BASE_DIR, r'surveyapp\data\all_conversations.xlsx')
+USERS_PATH = os.path.join(BASE_DIR, r'surveyapp\data\all_users.xlsx')
 USERS_SURVEYS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\users_surveys')
 
 SECRET_KEY = env.str('SECRET_KEY')
