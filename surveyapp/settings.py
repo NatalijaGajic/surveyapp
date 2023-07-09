@@ -8,6 +8,8 @@ env = environ.Env()
 environ.Env.read_env()
 
 NUM_OF_CONVERSATIONS_PER_SURVEY = env.int('NUM_OF_CONVERSATIONS_PER_SURVEY')
+NUM_OF_QUESTIONS_PER_CONVERSATION = env.int('NUM_OF_QUESTIONS_PER_CONVERSATION')
+SECONDS_PER_CONVERSATION = env.int('SECONDS_PER_CONVERSATION')
 BASIC_AUTH_USERNAME = env.str('BASIC_AUTH_USERNAME')
 BASIC_AUTH_PASSWORD = env.str('BASIC_AUTH_PASSWORD')
 
@@ -20,6 +22,7 @@ import os
 CONVERSATIONS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\conversations')
 CONVERSATIONS_PATH = os.path.join(BASE_DIR, r'surveyapp\data\all_conversations.xlsx')
 USERS_PATH = os.path.join(BASE_DIR, r'surveyapp\data\all_users.xlsx')
+CONVERSATIONS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\conversations')
 USERS_SURVEYS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\users_surveys')
 
 SECRET_KEY = env.str('SECRET_KEY')
@@ -33,6 +36,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.staticfiles',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     'survey',
     'user'
 ]

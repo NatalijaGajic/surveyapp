@@ -6,8 +6,8 @@ from shared.services.data_service import DataService
 
 # TODO user cant be registered twice
 def get_registration_code(registration_data):
-    first_name, last_name, registration_time = registration_data
-    value_to_sign = f'{first_name}_{last_name}_{registration_time}'
+    first_name, last_name, _ = registration_data
+    value_to_sign = f'{first_name}_{last_name}'
     signer = Signer()
     signed_value = signer.sign(value_to_sign).split(':')[1]
     return signed_value
