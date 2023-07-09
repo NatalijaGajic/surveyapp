@@ -1,67 +1,132 @@
+
+
+<head>
 <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/flatly/bootstrap.min.css" rel="stylesheet">
-<link src="surveyapp/survey/static/css/index.css" rel="stylesheet" type="text/css">
+<link src="static/css/index.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://www.jsviews.com/download/jsrender.js"></script>
+<script src="static/js/survey.js" type="text/javascript"></script>
+{{steps|json_script:"steps"}}
+<script type="text/javascript">
+    var steps = JSON.parse(document.getElementById('steps').textContent);
+</script>
+</head>
 
-<div style="display: flex; justify-content: end; position: fixed; width: 100%">
+<div id="countdown-content" style="display: flex; justify-content: end; position: fixed; width: 100%; visibility: hidden;">
     <div style="border-width: 1px; border-style: solid; border-color:rgba(0, 0, 0, 0.6); border-right: 0px; padding: 0.6rem 1rem 0.6rem 1rem; border-radius: 0 0 0 0.375rem;">
-        <i class="fas fa-clock fa-lg" style="color: #e74c3c; padding-right: 0.5rem;"></i><span style="color: #e74c3c; font-size: large;">04:34</span>
+        <i class="fas fa-clock fa-lg" style="color: #e74c3c; padding-right: 0.5rem;"></i><span id="countdown-timer" style="color: #e74c3c; font-size: large;"></span>
     </div>
 </div>
 
-<div style="padding: 5% 10% 10% 10%">
+<div id="content" style="padding: 5% 10% 10% 10%">
+    <!--JS render-->
+</div>
 
-    <div class="card border-primary">
-        <div class="card-body container">
-            <div class="row" style="display: flex; justify-content: flex-start;">
-                <div class="col-1">Q:</div><div class="card-text col-11">Tell me about a time you made a mistake at work. How did you resolve the problem, and what did you learn from your mistake?</div>
-            </div>
-            <br></br>
-            <div class="row" style="display: flex; justify-content: flex-start;">
-                <div class="col-1">A:</div><div class="card-text col-11">Recently, I was working on a bigger adjustment. The new funcionality was going to be used in multiple ways and by different modules in the system. I didn’t take enough time to figure out the best way to implement the funcionality. I had to refactor the code, and spend more time implementing it than I initially thought. I used to feel like I am not being produtive by not writing a lot of code, but I learned that it is always better to spend enough time planning the solution, and that less code can mean it is a well thought out solution.</div>
-            </div>
-        </div>
-    </div>
-
-
-    <div style="padding-top: 5%;">
+<script id="rating-conversation-template" type="text/x-jsrender">
+    {% verbatim %}
+    <div>
         <div class="card border-primary">
             <div class="card-body container">
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-11">Rate the previous conversation from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated.</div>
+                {{for conversation}}
+                <div class="row" style="display: flex; justify-content: flex-start;">
+                    <div class="col-1">Q:</div><div class="card-text col-11">{{>question}}</div>
                 </div>
-                <div class="row">
-                    <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios1">1</label></div>
-                    <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios2">2</label></div>
-                    <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios3">3</label></div>
-                    <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios4">4</label></div>
+                <div class="row" style="display: flex; justify-content: flex-start;">
+                    <div class="col-1">A:</div><div class="card-text col-11">{{>answer}}</div>
                 </div>
-                <div class="row">
-                    <div class="form-check col" style="display: flex; justify-content: center;">
-                        <input class="form-check-input" style="border-color: slategrey" type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                {{/for}}
+            </div>
+        </div>
+
+
+        <div style="padding-top: 5%;">
+            <div class="card border-primary">
+                <div class="card-body container">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-11">Rate the previous conversation from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated.</div>
                     </div>
-                    <div class="form-check col" style="display: flex; justify-content: center;">
-                        <input class="form-check-input" style="border-color: slategrey" type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                    <div class="row">
+                        <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios1">1</label></div>
+                        <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios2">2</label></div>
+                        <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios3">3</label></div>
+                        <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios4">4</label></div>
                     </div>
-                    <div class="form-check col" style="display: flex; justify-content: center;">
-                        <input class="form-check-input" style="border-color: slategrey" type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
-                    </div>
-                    <div class="form-check col" style="display: flex; justify-content: center;" >
-                        <input class="form-check-input" style="border-color: slategrey" type="radio" name="optionsRadios" id="optionsRadios4" value="option4">
+                    <div class="row">
+                        <div class="form-check col" style="display: flex; justify-content: center;">
+                            <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios1" value="1">
+                        </div>
+                        <div class="form-check col" style="display: flex; justify-content: center;">
+                            <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios2" value="2">
+                        </div>
+                        <div class="form-check col" style="display: flex; justify-content: center;">
+                            <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios3" value="3">
+                        </div>
+                        <div class="form-check col" style="display: flex; justify-content: center;" >
+                            <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios4" value="4">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
+        <div style="display: flex; justify-content: end; padding-top: 5%;">
+            <button id="finish-rating-btn" type="button" class="btn btn-info btn-lg" fdprocessedid="juw74p">Finish rating</button>
+        </div>
+    </div>
+    {% endverbatim %}
+</script>
+
+<script id="start-survey-template" type="text/x-jsrender">
+    {% verbatim %}
+    <div>
+    <div class="card border-primary">
+        <div class="card-body container">
+            <ul>
+                <li>You will be presented with five conversations consisting of five questions and answers. </li> 
+                <li>In each conversation, answers are either human-generated or machine-generated. </li>
+                <li>Conversations are picked at random, there is no predefined number of conversations with answers given by human or machine.</li>
+                <li>For each conversation, you will have 5 minutes to give a decision whether the answers were given by a human or ChatGPT.</li> 
+                <li>You will rate the conversation from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated. </li>
+                <li>After the rating of each conversation, you will be asked to provide a reason for your rating. After giving a reason, you will be presented with the next conversation.</li>
+            </ul>
+        </div>
+    </div>
     <div style="display: flex; justify-content: end; padding-top: 5%;">
-        <button type="button" class="btn btn-info btn-lg" fdprocessedid="juw74p">Finish rating</button>
+        <button id="start-survey-btn" type="button" class="btn btn-info btn-lg" fdprocessedid="juw74p">Start survey</button>
     </div>
+    </div>
+    {% endverbatim %}
+</script>
 
-</div>
+<script id="give-reason-template" type="text/x-jsrender">
+    {% verbatim %}
+    <div>
+    <div class="card border-primary">
+        <div class="card-body container">
+            <label for="exampleTextarea" class="form-label">What is your reason for the rating of the previous conversation?</label>
+            <textarea id="reason-text" class="form-control" id="exampleTextarea" rows="5"></textarea>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: end; padding-top: 5%;">
+        <button id="next-conversation-btn" type="button" class="btn btn-info btn-lg" fdprocessedid="juw74p">Next conversation</button>
+    </div>
+    </div>
+    {% endverbatim %}
+</script>
 
-
-
+<script id="end-survey-template" type="text/x-jsrender">
+    {% verbatim %}
+    <div>
+    <div class="card border-primary">
+        <div class="card-body container" style="background-color: powderblue">
+            <div>Thank you for your time. For any questions you can write at nat.gaj98@gmail.com</div>
+        </div>
+    </div>
+    </div>
+    {% endverbatim %}
+</script>
 
 

@@ -61,8 +61,8 @@ class DataService():
 
         for _, row in survey_df.iterrows():
             conversation, start_time, end_time, _, _ = row.replace({np.nan: None}).to_numpy()
-            survey_conversation_step = {'type': StepType.CONVERSATION.value, 'conversation': conversation, 'start_time':start_time, 'end_time': end_time}
-            reason_step = {'type': StepType.REASON.value, 'conversation': conversation, 'start_time': end_time, 'end_time': None}
+            survey_conversation_step = {'type': StepType.CONVERSATION.value, 'conversation_code': conversation, 'start_time':start_time, 'end_time': end_time}
+            reason_step = {'type': StepType.REASON.value, 'conversation_code': conversation, 'start_time': end_time, 'end_time': None}
             survey_steps.extend([survey_conversation_step, reason_step])
 
         return survey_steps

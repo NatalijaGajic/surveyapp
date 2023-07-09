@@ -59,7 +59,7 @@ def get_survey_steps_to_show(user_code):
     for step in survey_steps:
         if step['type'] == StepType.CONVERSATION.value:
             step['duration_in_seconds'] = settings.SECONDS_PER_CONVERSATION
-            conversation_code = step['conversation']
+            conversation_code = step['conversation_code']
             step['conversation'] = data_service.get_conversation_by_code(conversation_code)
 
     return survey_steps
