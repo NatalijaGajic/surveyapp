@@ -11,9 +11,11 @@ $(document).ready(function () {
     surveyStep = steps[currentStep];
     showContent(surveyStep);
 
-    $('#start-survey-btn').click(function(){
-        startSurvey();
+    // TODO user_code for service calls 
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
     });
+    console.log(params.code);
    
 });
 
@@ -21,8 +23,9 @@ function startSurvey(){
     timeNow = new Date()
     steps[currentStep]['end_time'] = timeNow
     steps[currentStep+1]['start_time'] = timeNow
-    // TODO call service, record start_time for conversation steps[currentStep+1]['conversation'] start_time=timeNow
+    // TODO call /start-survey, record start_time for conversation steps[currentStep+1]['conversation'] start_time=timeNow
     showNextSurveyScreen();
+
 }
 
 function showNextSurveyScreen(){
@@ -55,6 +58,10 @@ function showContent(surveyStep){
 function showStartTemplate(surveyStepData){
     var template = $.templates('#start-survey-template');
     renderContentTemplate(template, surveyStepData)
+
+    $('#start-survey-btn').click(function(){
+        startSurvey();
+    });
 }
 
 function showConversationTemplate(surveyStepData){
@@ -115,7 +122,7 @@ function finishRating(){
     rating = $('input[name=rating]:checked').val()
     if(rating === undefined)
         return;
-    // TODO call service, record answer rating=rating, conversation=steps[currentStep]['conversation_code'], update end_time
+    // TODO call /rate-conversation, record answer rating=rating, conversation=steps[currentStep]['conversation_code'], update end_time
     $('#countdown-content').css('visibility', 'hidden');
     timeNow = new Date();
     steps[currentStep]['end_time'] = timeNow;
@@ -125,7 +132,7 @@ function finishRating(){
 
 function giveReason(){
     reason = $('#reason-text').val();
-    // TODO call service, record reason, conversation=steps[currentStep]['conversation_code'], update start_time for next conv.
+    // TODO call /give-reason, record reason, conversation=steps[currentStep]['conversation_code'], update start_time for next conv.
     timeNow = new Date();
     steps[currentStep]['end_time'] = timeNow;
     if(steps[currentStep+1]['type'] === CONVERSATION_SCREEN){
@@ -137,4 +144,5 @@ function giveReason(){
 function showEndTemplate(){
     template = $('#end-survey-template');
     renderContentTemplate(template, null);
+    // TODO call /end-survey, update user survey_done
 }

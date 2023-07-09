@@ -1,6 +1,7 @@
 
 import numpy as np
 from datetime import datetime
+import json
 
 from django.conf import settings
 from shared.services.data_service import DataService
@@ -66,4 +67,67 @@ def get_survey_steps_to_show(user_code):
 
 
 
+def get_start_survey_data(request):
+    try:
+        payload = json.loads(request.body)
+        start_time, user_code = payload['start_time'], payload['user_code']
+        user = get_user_by_code(user_code)
+        if not user:
+            False, []        
+        return True, [start_time, user_code]
+    except:
+        False, []
 
+
+def start_survey_by_user(data):
+    start_time, user_code = data
+    data_service = DataService()
+    data_service.start_survey(start_time, user_code) # TODO add start_survey (find user_survey, add start_time to first conversation)
+
+def get_rate_conversation_data(request):
+    try:
+        payload = json.loads(request.body)
+        conversation_code, end_time, rating, user_code = payload['conversation_code'], payload['end_time'], payload['rating'], payload['user_code']
+        user = get_user_by_code(user_code)
+        if not user:
+            False, {}        
+        return True, {'conversation_code': conversation_code, 'end_time': end_time, 'rating': rating, 'user_code': user_code}
+    except:
+        False, {}
+
+
+def rate_conversation(data):
+    data_service = DataService()
+    data_service.rate_conversation(data) # TODO add rate_conversation (find user_survey, add end_time, rating to conversation)
+
+
+def get_give_reason_data(request):
+    try:
+        payload = json.loads(request.body)
+        conversation_code, user_code, reason, conversation_start_time = payload['conversation_code'], payload['user_code'], payload['reason'], payload['conversation_start_time']
+        user = get_user_by_code(user_code)
+        if not user:
+            False, {}        
+        return True, {'conversation_code': conversation_code, 'reason': reason, 'user_code': user_code, 'conversation_start_time': conversation_start_time}
+    except:
+        False, {}
+
+def give_reason(data):
+    data_service = DataService()
+    data_service.give_reason(data) # TODO add give_reason (find user_survey, add start_time to next conversation, reason to conversation)
+
+
+def get_end_survey_data(request):
+    try:
+        payload = json.loads(request.body)
+        end_time, user_code =payload['end_time'], payload['user_code']
+        user = get_user_by_code(user_code)
+        if not user:
+            False, {}        
+        return True, { 'end_time': end_time, 'user_code': user_code}
+    except:
+        False, {}
+
+def end_survey(data):
+    data_service = DataService()
+    data_service.end_survey(data) # TODO add end_survey (find user, update survey_done)
