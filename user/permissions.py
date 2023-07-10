@@ -21,6 +21,11 @@ def view_or_basicauth(view, request, *args, **kwargs):
 
 
 def is_allowed_to_register(func):
-        def wrapper(request, *args, **kwargs):
-            return view_or_basicauth(func, request, *args, **kwargs)
-        return wrapper
+    def wrapper(request, *args, **kwargs):
+        return view_or_basicauth(func, request, *args, **kwargs)
+    return wrapper
+
+def is_allowed_to_reset_survey(func):
+    def wrapper(request, *args, **kwargs):
+        return view_or_basicauth(func, request, *args, **kwargs)
+    return wrapper

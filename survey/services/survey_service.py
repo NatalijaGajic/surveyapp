@@ -124,11 +124,27 @@ def get_end_survey_data(request):
         user_code = payload['user_code']
         user = get_user_by_code(user_code)
         if not user:
-            False, None       
+            return False, None       
         return True, user_code
     except:
-        False, None
+        return False, None
 
 def end_user_survey(user_code):
     data_service = DataService()
     data_service.end_user_survey(user_code)
+
+
+def get_reset_survey_data(request):
+    try:
+        payload = json.loads(request.body)
+        code = payload['user_code']
+        user = get_user_by_code(code)
+        if not user:
+            return False, None       
+        return True, code
+    except:
+        return False, None
+
+def reset_user_survey(user_code):
+    data_service = DataService()
+    data_service.reset_user_survey(user_code)

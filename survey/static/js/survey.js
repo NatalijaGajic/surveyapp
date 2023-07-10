@@ -8,7 +8,6 @@ const SECONDS_PER_CONVERSATION = 300;
 var timer_countdown = null;
 
 $(document).ready(function () {
-    console.log(steps);
     surveyStep = steps[currentStep];
     showContent(surveyStep);
    
@@ -106,7 +105,6 @@ function showTimeCountdownUntil(end_time){
 
         
         if (distance <= 0){
-            clearInterval(timer_countdown);
             $('#countdown-timer').text('00:00');
             endConversationScreenAfterCountdown();
             return;
@@ -120,7 +118,7 @@ function showTimeCountdownUntil(end_time){
 }
 
 function endConversationScreenAfterCountdown(){
-    $('#countdown-content').css('visibility', 'hidden');
+    clearTimeCountdown();
     showNextSurveyScreen();
 }
 
@@ -144,10 +142,7 @@ function finishRating(){
     if(rating === undefined)
         return;
     
-    if(timer_countdown !== null){
-        clearInterval(timer_countdown);
-    }
-    $('#countdown-content').css('visibility', 'hidden');
+    clearTimeCountdown();
     
     timeNow = new Date().getTime();
     steps[currentStep]['end_time'] = timeNow;
@@ -242,4 +237,11 @@ function callEndSurvey(){
         complete: function(){}
 
     });
+}
+
+
+function clearTimeCountdown(){
+    $('#countdown-timer').text('');
+    clearInterval(timer_countdown);
+    $('#countdown-content').css('visibility', 'hidden');
 }

@@ -110,3 +110,16 @@ class DataService():
         users_df = pd.read_excel(settings.USERS_PATH)
         users_df.loc[users_df['code'] == code, 'survey_done'] = True
         users_df.to_excel(settings.USERS_PATH, engine='xlsxwriter', columns=self.all_users_columns, index=False)
+
+
+    def reset_user_survey(self, code):
+        users_df = pd.read_excel(settings.USERS_PATH)
+        users_df.loc[users_df['code'] == code, 'survey_done'] = False
+        users_df.to_excel(settings.USERS_PATH, engine='xlsxwriter', columns=self.all_users_columns, index=False)
+        survey_df = self.get_user_survey_by_user_code(code)
+        for ind, row in survey_df.iterrows():
+            survey_df.at[ind, 'start_time'] = None
+            survey_df.at[ind, 'end_time'] = None
+            survey_df.at[ind, 'rating'] = None
+            survey_df.at[ind, 'reason'] = None
+        self.update_user_survey(survey_df, code)

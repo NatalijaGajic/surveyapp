@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
 
 from .services.survey_service import get_user_by_code, get_survey_steps_to_show, get_start_survey_data, start_survey_by_user, \
-    get_rate_conversation_data, rate_conversation_by_user, get_give_reason_data, give_reason_by_user, get_end_survey_data, end_user_survey
+    get_rate_conversation_data, rate_conversation_by_user, get_give_reason_data, give_reason_by_user, get_end_survey_data, \
+    end_user_survey, get_reset_survey_data, reset_user_survey
 
+from user.permissions import is_allowed_to_reset_survey
 
 def index(request):
     code = request.GET.get('code', None) 
@@ -35,7 +37,7 @@ def rate_conversation(request):
     success, data = get_rate_conversation_data(request)
     if not success:
         return HttpResponseBadRequest()
-    print('view')
+
     rate_conversation_by_user(data)
 
     return JsonResponse({'message': 'OK', 'content': {}})
@@ -56,4 +58,16 @@ def end_survey(request):
         return HttpResponseBadRequest()
     
     end_user_survey(data)
+    return JsonResponse({'message': 'OK', 'content': {}})
+
+
+@is_allowed_to_reset_survey
+def reset_survey(request):
+
+    success, code = get_reset_survey_data(request)
+    if not success:
+        return HttpResponseBadRequest()
+    
+    reset_user_survey(code)
+
     return JsonResponse({'message': 'OK', 'content': {}})
