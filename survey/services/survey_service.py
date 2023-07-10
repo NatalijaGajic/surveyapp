@@ -90,15 +90,15 @@ def get_rate_conversation_data(request):
         conversation_code, end_time, rating, user_code = payload['conversation_code'], payload['end_time'], payload['rating'], payload['user_code']
         user = get_user_by_code(user_code)
         if not user:
-            False, {}        
-        return True, {'conversation_code': conversation_code, 'end_time': end_time, 'rating': rating, 'user_code': user_code}
+            False, []        
+        return True, [conversation_code, end_time, rating, user_code]
     except:
-        return False, {}
+        return False, []
 
 
-def rate_conversation(data):
+def rate_conversation_by_user(data):
     data_service = DataService()
-    data_service.rate_conversation(data) # TODO add rate_conversation (find user_survey, add end_time, rating to conversation)
+    data_service.rate_conversation(data)
 
 
 def get_give_reason_data(request):

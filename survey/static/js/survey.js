@@ -142,12 +142,31 @@ function finishRating(){
     rating = $('input[name=rating]:checked').val()
     if(rating === undefined)
         return;
-    // TODO call /rate-conversation, record answer rating=rating, conversation=steps[currentStep]['conversation_code'], update end_time
     $('#countdown-content').css('visibility', 'hidden');
-    timeNow = new Date();
+    timeNow = new Date().getTime();
     steps[currentStep]['end_time'] = timeNow;
     steps[currentStep+1]['start_time'] = timeNow;
     showNextSurveyScreen();
+    callRateConversation(steps[currentStep]['conversation_code'], timeNow, rating)
+}
+
+function callRateConversation(conversationCode, timeNow, rating){
+    $.ajax({
+        url: 'rate-conversation/',
+        data: JSON.stringify({
+            'end_time': timeNow,
+            'rating': rating,
+            'conversation_code': conversationCode,
+            'user_code': getUserCode()
+        }),
+        contentType:'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        success: function(data){},
+        error: function(error){},
+        complete: function(){}
+
+    });
 }
 
 function giveReason(){

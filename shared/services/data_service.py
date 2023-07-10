@@ -77,5 +77,16 @@ class DataService():
         survey_df = self.get_user_survey_by_user_code(user_code)
         survey_df.at[0, 'start_time'] = timestamp
         survey_df.at[0, 'end_time'] = conversation_end_timestamp
+        self.update_user_survey(survey_df, user_code)
+
+
+    def rate_conversation(self, data):
+        conversation_code, end_time, rating, user_code = data
+        survey_df = self.get_user_survey_by_user_code(user_code)
+        survey_df.loc[survey_df['conversation'] == conversation_code, 'end_time'] = end_time
+        survey_df.loc[survey_df['conversation'] == conversation_code, 'rating'] = rating
+        self.update_user_survey(survey_df, user_code)
+
+    def update_user_survey(self, survey_df, user_code):
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(user_code)
         survey_df.to_excel(file_path, engine='xlsxwriter', columns=self.user_survey_columns, index=False)

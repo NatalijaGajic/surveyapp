@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
 
-from .services.survey_service import get_user_by_code, get_survey_steps_to_show, get_start_survey_data, start_survey_by_user, get_rate_conversation_data, get_give_reason_data, give_reason, get_end_survey_data, end_survey
+from .services.survey_service import get_user_by_code, get_survey_steps_to_show, get_start_survey_data, start_survey_by_user, get_rate_conversation_data, rate_conversation_by_user, get_give_reason_data, give_reason, get_end_survey_data, end_survey
 
 
 def index(request):
@@ -31,8 +31,8 @@ def rate_conversation(request):
     success, data = get_rate_conversation_data(request)
     if not success:
         return HttpResponseBadRequest()
-    
-    rate_conversation(data)
+    print('view')
+    rate_conversation_by_user(data)
 
     return JsonResponse({'message': 'OK', 'content': {}})
 
