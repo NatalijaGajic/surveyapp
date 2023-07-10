@@ -59,14 +59,19 @@ class DataService():
         survey_df = self.get_user_survey_by_user_code(code)
         survey_steps = []
 
-        for _, row in survey_df.iterrows():
+        for ind, row in survey_df.iterrows():
             conversation, start_time, end_time, _, _ = row.replace({np.nan: None}).to_numpy()
             survey_conversation_step = {'type': StepType.CONVERSATION.value, 'conversation_code': conversation, 'start_time':start_time, 'end_time': end_time}
             reason_step = {'type': StepType.REASON.value, 'conversation_code': conversation, 'start_time': end_time, 'end_time': None}
+            reason_step['end_time'] = self.get_next_conversation_start_time(survey_df, ind)
             survey_steps.extend([survey_conversation_step, reason_step])
 
         return survey_steps
     
+    def get_next_conversation_start_time(self, survey_df, ind):
+        if ind + 1 >= survey_df.shape[0]:
+            return None
+        return survey_df.loc[ind + 1].replace({np.nan: None})['start_time']
 
     def get_user_survey_by_user_code(self, code):
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(code)
@@ -90,3 +95,12 @@ class DataService():
     def update_user_survey(self, survey_df, user_code):
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(user_code)
         survey_df.to_excel(file_path, engine='xlsxwriter', columns=self.user_survey_columns, index=False)
+
+    def give_reason(self, data):
+        conversation_code, user_code, reason, conversation_start_time, conversation_end_time, started_conversation_code = data
+        survey_df = self.get_user_survey_by_user_code(user_code)
+        survey_df.loc[survey_df['conversation'] == conversation_code, 'reason'] = reason
+        if started_conversation_code:
+            survey_df.loc[survey_df['conversation'] == started_conversation_code, 'start_time'] = conversation_start_time
+            survey_df.loc[survey_df['conversation'] == started_conversation_code, 'end_time'] = conversation_end_time
+        self.update_user_survey(survey_df, user_code)

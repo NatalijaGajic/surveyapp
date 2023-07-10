@@ -73,7 +73,7 @@ def get_start_survey_data(request):
         start_time, user_code, conversation_end_time = payload['start_time'], payload['user_code'], payload['conversation_end_time']
         user = get_user_by_code(user_code)
         if not user:
-            False, []        
+            return False, []        
         return True, [start_time, user_code, conversation_end_time]
     except:
         return False, []
@@ -90,7 +90,7 @@ def get_rate_conversation_data(request):
         conversation_code, end_time, rating, user_code = payload['conversation_code'], payload['end_time'], payload['rating'], payload['user_code']
         user = get_user_by_code(user_code)
         if not user:
-            False, []        
+            return False, []        
         return True, [conversation_code, end_time, rating, user_code]
     except:
         return False, []
@@ -104,17 +104,18 @@ def rate_conversation_by_user(data):
 def get_give_reason_data(request):
     try:
         payload = json.loads(request.body)
-        conversation_code, user_code, reason, conversation_start_time = payload['conversation_code'], payload['user_code'], payload['reason'], payload['conversation_start_time']
+        conversation_code, user_code, reason, conversation_start_time, conversation_end_time, started_conversation_code = \
+        payload['conversation_code'], payload['user_code'], payload['reason'], payload['conversation_start_time'], payload['conversation_end_time'], payload['started_conversation_code']
         user = get_user_by_code(user_code)
         if not user:
-            False, {}        
-        return True, {'conversation_code': conversation_code, 'reason': reason, 'user_code': user_code, 'conversation_start_time': conversation_start_time}
+            return False, []        
+        return True, [conversation_code, user_code, reason, conversation_start_time, conversation_end_time, started_conversation_code]
     except:
-        False, {}
+        return False, []
 
-def give_reason(data):
+def give_reason_by_user(data):
     data_service = DataService()
-    data_service.give_reason(data) # TODO add give_reason (find user_survey, add start_time to next conversation, reason to conversation)
+    data_service.give_reason(data)
 
 
 def get_end_survey_data(request):

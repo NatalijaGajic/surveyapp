@@ -5,6 +5,7 @@ const CONVERSATION_SCREEN = 'conversation';
 const REASON_SCREEN = 'reason';
 const END_SCREEN = 'end';
 const SECONDS_PER_CONVERSATION = 300;
+var timer_countdown = null;
 
 $(document).ready(function () {
     console.log(steps);
@@ -97,7 +98,7 @@ function showConversationTemplate(surveyStepData){
 }
 
 function showTimeCountdownUntil(end_time){
-    var timer_countdown = setInterval(function () {
+    timer_countdown = setInterval(function () {
         var now = new Date()
         var distance = end_time.getTime() - now.getTime();
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -142,12 +143,18 @@ function finishRating(){
     rating = $('input[name=rating]:checked').val()
     if(rating === undefined)
         return;
+    
+    if(timer_countdown !== null){
+        clearInterval(timer_countdown);
+    }
     $('#countdown-content').css('visibility', 'hidden');
+    
     timeNow = new Date().getTime();
     steps[currentStep]['end_time'] = timeNow;
     steps[currentStep+1]['start_time'] = timeNow;
+
     showNextSurveyScreen();
-    callRateConversation(steps[currentStep]['conversation_code'], timeNow, rating)
+    callRateConversation(steps[currentStep-1]['conversation_code'], timeNow, rating)
 }
 
 function callRateConversation(conversationCode, timeNow, rating){
@@ -170,14 +177,48 @@ function callRateConversation(conversationCode, timeNow, rating){
 }
 
 function giveReason(){
-    reason = $('#reason-text').val();
-    // TODO call /give-reason, record reason, conversation=steps[currentStep]['conversation_code'], update start_time for next conv.
-    timeNow = new Date();
+    timeNow = new Date().getTime();
     steps[currentStep]['end_time'] = timeNow;
-    if(steps[currentStep+1]['type'] === CONVERSATION_SCREEN){
-        steps[currentStep+1]['start_time'] = timeNow;
-    }
+
+    var [startedConversationCode, startedConversationEndTime] = startNextConversation()
+
+    reason = $('#reason-text').val();
     showNextSurveyScreen();
+    callGiveReason(timeNow, reason, steps[currentStep-1]['conversation_code'], startedConversationEndTime, startedConversationCode);
+
+}
+
+function startNextConversation(){
+    if(steps[currentStep+1]['type'] !== CONVERSATION_SCREEN){
+        return [null, null];
+    }
+
+    startedConversationCode = steps[currentStep+1]['conversation_code'];
+    steps[currentStep+1]['start_time'] = timeNow;
+    startedConversationEndTime = new Date(steps[currentStep+1]['start_time'] + SECONDS_PER_CONVERSATION * 1000).getTime();
+
+    return [startedConversationCode, startedConversationEndTime];
+}
+
+function callGiveReason(timeNow, reason, conversationCode, conversationEndTime, startedConversationCode){
+    $.ajax({
+        url: 'give-reason/',
+        data: JSON.stringify({
+            'conversation_start_time': timeNow,
+            'conversation_end_time': conversationEndTime,
+            'reason': reason,
+            'started_conversation_code': startedConversationCode,
+            'conversation_code': conversationCode,
+            'user_code': getUserCode()
+        }),
+        contentType:'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        success: function(data){},
+        error: function(error){},
+        complete: function(){}
+
+    });
 }
 
 function showEndTemplate(){
