@@ -224,5 +224,22 @@ function callGiveReason(timeNow, reason, conversationCode, conversationEndTime, 
 function showEndTemplate(){
     template = $('#end-survey-template');
     renderContentTemplate(template, null);
-    // TODO call /end-survey, update user survey_done
+    callEndSurvey();
+}
+
+
+function callEndSurvey(){
+    $.ajax({
+        url: 'end-survey/',
+        data: JSON.stringify({
+            'user_code': getUserCode()
+        }),
+        contentType:'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        success: function(data){},
+        error: function(error){},
+        complete: function(){}
+
+    });
 }

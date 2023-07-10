@@ -121,14 +121,14 @@ def give_reason_by_user(data):
 def get_end_survey_data(request):
     try:
         payload = json.loads(request.body)
-        end_time, user_code =payload['end_time'], payload['user_code']
+        user_code = payload['user_code']
         user = get_user_by_code(user_code)
         if not user:
-            False, {}        
-        return True, { 'end_time': end_time, 'user_code': user_code}
+            False, None       
+        return True, user_code
     except:
-        False, {}
+        False, None
 
-def end_survey(data):
+def end_user_survey(user_code):
     data_service = DataService()
-    data_service.end_survey(data) # TODO add end_survey (find user, update survey_done)
+    data_service.end_user_survey(user_code)

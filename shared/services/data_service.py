@@ -104,3 +104,9 @@ class DataService():
             survey_df.loc[survey_df['conversation'] == started_conversation_code, 'start_time'] = conversation_start_time
             survey_df.loc[survey_df['conversation'] == started_conversation_code, 'end_time'] = conversation_end_time
         self.update_user_survey(survey_df, user_code)
+
+
+    def end_user_survey(self, code):
+        users_df = pd.read_excel(settings.USERS_PATH)
+        users_df.loc[users_df['code'] == code, 'survey_done'] = True
+        users_df.to_excel(settings.USERS_PATH, engine='xlsxwriter', columns=self.all_users_columns, index=False)
