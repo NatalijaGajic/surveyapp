@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
 from django.conf import settings
 from shared.models import StepType
@@ -72,8 +73,9 @@ class DataService():
         survey_df = pd.read_excel(file_path)
         return survey_df
     
-    def start_survey(self, time, user_code):
+    def start_survey(self, timestamp, user_code, conversation_end_timestamp):
         survey_df = self.get_user_survey_by_user_code(user_code)
-        survey_df.at[0, 'start_time'] = time
+        survey_df.at[0, 'start_time'] = timestamp
+        survey_df.at[0, 'end_time'] = conversation_end_timestamp
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(user_code)
         survey_df.to_excel(file_path, engine='xlsxwriter', columns=self.user_survey_columns, index=False)

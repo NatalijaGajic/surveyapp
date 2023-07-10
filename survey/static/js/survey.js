@@ -21,19 +21,21 @@ function getUserCode(){
 }
 
 function startSurvey(){
-    timeNow = new Date()
+    timeNow = new Date().getTime()
     steps[currentStep]['end_time'] = timeNow
     steps[currentStep+1]['start_time'] = timeNow
+    conversationScreenEndTime = new Date(timeNow + (SECONDS_PER_CONVERSATION * 1000))
     showNextSurveyScreen();
-    callStartSurvey(timeNow);
+    callStartSurvey(timeNow, conversationScreenEndTime.getTime());
 
 }
 
-function callStartSurvey(time){
+function callStartSurvey(time, conversationScreenEndTime){
     $.ajax({
         url: 'start-survey/',
         data: JSON.stringify({
             'start_time': time,
+            'conversation_end_time': conversationScreenEndTime,
             'user_code': getUserCode()
         }),
         contentType:'application/json; charset=utf-8',
@@ -86,7 +88,7 @@ function showConversationTemplate(surveyStepData){
     var template = $.templates('#rating-conversation-template');
     renderContentTemplate(template, surveyStepData)
 
-    conversationScreenEndTime = new Date(surveyStepData['start_time'].getTime() + SECONDS_PER_CONVERSATION * 1000);
+    conversationScreenEndTime = new Date(surveyStepData['start_time'] + SECONDS_PER_CONVERSATION * 1000);
     showTimeCountdownUntil(conversationScreenEndTime);
 
     $('#finish-rating-btn').click(function(){

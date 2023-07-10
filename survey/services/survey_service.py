@@ -32,7 +32,7 @@ def get_next_survey_steps(data_service, code):
     survey_steps = data_service.get_user_survey_steps_by_user_code(code)
     next_step_ind = -1
     for ind, step in enumerate(survey_steps):
-        step_not_done = step['end_time'] is None or step['end_time'] > datetime.now()
+        step_not_done = step['end_time'] is None or datetime.fromtimestamp(float(step['end_time']) / 1000.0) > datetime.now()
         if step_not_done:
             next_step_ind = ind
             break
@@ -46,7 +46,7 @@ def get_next_survey_steps(data_service, code):
 
 
 def add_start_and_end_step(survey_steps, next_step_ind):
-    survey_not_started = next_step_ind == 0
+    survey_not_started = next_step_ind == 0 and survey_steps[0]['start_time'] is None
     if survey_not_started:
         survey_steps.insert(0, {'type': StepType.START.value})
     survey_steps.append({'type': StepType.END.value})
@@ -70,19 +70,19 @@ def get_survey_steps_to_show(user_code):
 def get_start_survey_data(request):
     try:
         payload = json.loads(request.body)
-        start_time, user_code = payload['start_time'], payload['user_code']
+        start_time, user_code, conversation_end_time = payload['start_time'], payload['user_code'], payload['conversation_end_time']
         user = get_user_by_code(user_code)
         if not user:
             False, []        
-        return True, [start_time, user_code]
+        return True, [start_time, user_code, conversation_end_time]
     except:
         return False, []
 
 
 def start_survey_by_user(data):
-    start_time, user_code = data
+    start_time, user_code, conversation_end_time = data
     data_service = DataService()
-    data_service.start_survey(start_time, user_code) # TODO add start_survey (find user_survey, add start_time to first conversation)
+    data_service.start_survey(start_time, user_code, conversation_end_time)
 
 def get_rate_conversation_data(request):
     try:
