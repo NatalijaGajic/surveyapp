@@ -15,10 +15,10 @@ def index(request):
         return HttpResponseForbidden()
     
     if user['survey_done']:
-        return render(request, 'index.html', context = {'steps': [{'type': 'end'}]})
+        return render(request, 'index.html', context = {'steps': [{'type': 'end'}], 'code': code})
     
     survey_steps = get_survey_steps_to_show(code)
-    return render(request, 'index.html', context = {'steps': survey_steps})
+    return render(request, 'index.html', context = {'steps': survey_steps, 'code': code})
 
 
 def start_survey(request):
