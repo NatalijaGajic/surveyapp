@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseForbidden, HttpResponseNotAllowed, Http404, JsonResponse
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
 
 from .services.survey_service import get_user_by_code, get_survey_steps_to_show, get_start_survey_data, start_survey_by_user, get_rate_conversation_data, get_give_reason_data, give_reason, get_end_survey_data, end_survey
 
@@ -21,7 +21,7 @@ def start_survey(request):
     
     success, data = get_start_survey_data(request)
     if not success:
-        return Http404()
+        return HttpResponseBadRequest()
     
     start_survey_by_user(data)
     
@@ -30,7 +30,7 @@ def start_survey(request):
 def rate_conversation(request):
     success, data = get_rate_conversation_data(request)
     if not success:
-        return Http404()
+        return HttpResponseBadRequest()
     
     rate_conversation(data)
 
@@ -40,7 +40,7 @@ def rate_conversation(request):
 def give_reason(request):
     success, data = get_give_reason_data(request)
     if not success:
-        return Http404()
+        return HttpResponseBadRequest()
     
     give_reason(data)
     return JsonResponse({'message': 'OK', 'content': {}})
@@ -49,7 +49,7 @@ def give_reason(request):
 def end_survey(request):
     success, data = get_end_survey_data(request)
     if not success:
-        return Http404()
+        return HttpResponseBadRequest()
     
     end_survey(data)
     return JsonResponse({'message': 'OK', 'content': {}})

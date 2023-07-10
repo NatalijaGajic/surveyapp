@@ -10,22 +10,40 @@ $(document).ready(function () {
     console.log(steps);
     surveyStep = steps[currentStep];
     showContent(surveyStep);
+   
+});
 
-    // TODO user_code for service calls 
+function getUserCode(){
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
-    console.log(params.code);
-   
-});
+    return params.code;
+}
 
 function startSurvey(){
     timeNow = new Date()
     steps[currentStep]['end_time'] = timeNow
     steps[currentStep+1]['start_time'] = timeNow
-    // TODO call /start-survey, record start_time for conversation steps[currentStep+1]['conversation'] start_time=timeNow
     showNextSurveyScreen();
+    callStartSurvey(timeNow);
 
+}
+
+function callStartSurvey(time){
+    $.ajax({
+        url: 'start-survey/',
+        data: JSON.stringify({
+            'start_time': time,
+            'user_code': getUserCode()
+        }),
+        contentType:'application/json; charset=utf-8',
+        dataType: 'json',
+        type: 'POST',
+        success: function(data){},
+        error: function(error){},
+        complete: function(){}
+
+    });
 }
 
 function showNextSurveyScreen(){

@@ -20,7 +20,7 @@ def get_registration_data(request):
         registration_time = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         return True, [first_name, last_name, registration_time]
     except:
-        False, []
+        return False, []
 
 def add_user(user_data):
     service = DataService()

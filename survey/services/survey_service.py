@@ -76,7 +76,7 @@ def get_start_survey_data(request):
             False, []        
         return True, [start_time, user_code]
     except:
-        False, []
+        return False, []
 
 
 def start_survey_by_user(data):
@@ -93,7 +93,7 @@ def get_rate_conversation_data(request):
             False, {}        
         return True, {'conversation_code': conversation_code, 'end_time': end_time, 'rating': rating, 'user_code': user_code}
     except:
-        False, {}
+        return False, {}
 
 
 def rate_conversation(data):

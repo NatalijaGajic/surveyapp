@@ -38,7 +38,6 @@ class DataService():
                 'timestamp': user[2], 'code': user[3], 'survey_done': user[4]}
 
 
-
     def get_conversation_by_code(self, code):
         conversations_df = pd.read_excel(settings.CONVERSATIONS_PATH)
         conversation_with_code_exists = code in conversations_df['code'].to_numpy()
@@ -72,3 +71,9 @@ class DataService():
         file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(code)
         survey_df = pd.read_excel(file_path)
         return survey_df
+    
+    def start_survey(self, time, user_code):
+        survey_df = self.get_user_survey_by_user_code(user_code)
+        survey_df.at[0, 'start_time'] = time
+        file_path = settings.USERS_SURVEYS_DIR + r'\{}.xlsx'.format(user_code)
+        survey_df.to_excel(file_path, engine='xlsxwriter', columns=self.user_survey_columns, index=False)
