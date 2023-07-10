@@ -137,7 +137,7 @@ def end_user_survey(user_code):
 def get_reset_survey_data(request):
     try:
         payload = json.loads(request.body)
-        code = payload['user_code']
+        code = payload['code']
         user = get_user_by_code(code)
         if not user:
             return False, None       
