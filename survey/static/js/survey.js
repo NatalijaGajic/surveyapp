@@ -4,10 +4,10 @@ const START_SCREEN = 'start';
 const CONVERSATION_SCREEN = 'conversation';
 const REASON_SCREEN = 'reason';
 const END_SCREEN = 'end';
+const ERROR_SCREEN = 'error';
 var timeCountdown = null;
 
 $(document).ready(function () {
-    console.log(steps);
     surveyStep = steps[currentStep];
     showContent(surveyStep);
    
@@ -68,6 +68,8 @@ function showContent(surveyStep){
         case END_SCREEN:
             showEndTemplate();
             break;
+        case ERROR_SCREEN:
+            showErrorTemplate();
         default:
             break;
     }
@@ -242,4 +244,9 @@ function clearTimeCountdown(){
     $('#countdown-timer').text('');
     clearInterval(timeCountdown);
     $('#countdown-content').css('visibility', 'hidden');
+}
+
+function showErrorTemplate(){
+    var template = $.templates('#error-template');
+    renderContentTemplate(template, null);
 }

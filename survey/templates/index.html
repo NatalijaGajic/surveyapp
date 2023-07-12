@@ -11,6 +11,7 @@
 {{steps|json_script:"steps"}}
 {{code|json_script:"code"}}
 {{seconds_per_conversation|json_script:"seconds_per_conversation"}}
+
 <script type="text/javascript">
     var steps = JSON.parse(document.getElementById('steps').textContent);
     const code = JSON.parse(document.getElementById('code').textContent);
@@ -133,6 +134,18 @@
             <div>Thank you for your time. For any questions you can write at nat.gaj98@gmail.com</div>
         </div>
     </div>
+    </div>
+    {% endverbatim %}
+</script>
+
+<script id="error-template" type="text/x-jsrender">
+    {% verbatim %}
+    <div>
+        <div class="card border-primary">
+            <div class="card-body container" style="background-color: #e74c3c">
+                <div>Something went wrong. Contact nat.gaj98@gmail.com</div>
+            </div>
+        </div>
     </div>
     {% endverbatim %}
 </script>

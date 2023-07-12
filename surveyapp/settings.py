@@ -27,9 +27,10 @@ USERS_SURVEYS_DIR = os.path.join(BASE_DIR, r'surveyapp\data\users_surveys')
 
 SECRET_KEY = env.str('SECRET_KEY')
 
-DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = env.bool('DEBUG_ON')
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -67,6 +68,25 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, r'surveyapp\data\debug.log')
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+    },
+}
 
 
 WSGI_APPLICATION = 'surveyapp.wsgi.application'
