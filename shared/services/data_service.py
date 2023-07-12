@@ -8,7 +8,7 @@ from shared.models import StepType
 
 class DataService():
 
-    all_users_columns = ['first_name', 'last_name', 'timestamp', 'code', 'survey_done']
+    all_users_columns = ['first_name', 'last_name', 'email','timestamp', 'code', 'survey_done']
     user_survey_columns = ['conversation', 'start_time', 'end_time', 'rating', 'reason']
 
     def get_conversations(self):
@@ -36,7 +36,7 @@ class DataService():
 
         user =  users_df.loc[(users_df['code'] == code)].values[0]
         return {'first_name': user[0], 'last_name': user[1], 
-                'timestamp': user[2], 'code': user[3], 'survey_done': user[4]}
+                'timestamp': user[2], 'code': user[4], 'survey_done': user[5]}
 
 
     def get_conversation_by_code(self, code):

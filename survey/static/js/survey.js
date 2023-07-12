@@ -4,10 +4,10 @@ const START_SCREEN = 'start';
 const CONVERSATION_SCREEN = 'conversation';
 const REASON_SCREEN = 'reason';
 const END_SCREEN = 'end';
-const SECONDS_PER_CONVERSATION = 300;
-var timer_countdown = null;
+var timeCountdown = null;
 
 $(document).ready(function () {
+    console.log(steps);
     surveyStep = steps[currentStep];
     showContent(surveyStep);
    
@@ -22,6 +22,7 @@ function startSurvey(){
     steps[currentStep]['end_time'] = timeNow
     steps[currentStep+1]['start_time'] = timeNow
     conversationScreenEndTime = new Date(timeNow + (SECONDS_PER_CONVERSATION * 1000))
+    
     showNextSurveyScreen();
     callStartSurvey(timeNow, conversationScreenEndTime.getTime());
 
@@ -52,9 +53,9 @@ function showNextSurveyScreen(){
 }  
 
 function showContent(surveyStep){
-    screen_type = surveyStep['type'];
+    screenType = surveyStep['type'];
 
-    switch(screen_type){
+    switch(screenType){
         case START_SCREEN:
             showStartTemplate(surveyStep)
             break;
@@ -94,7 +95,7 @@ function showConversationTemplate(surveyStepData){
 }
 
 function showTimeCountdownUntil(end_time){
-    timer_countdown = setInterval(function () {
+    timeCountdown = setInterval(function () {
         var now = new Date()
         var distance = end_time.getTime() - now.getTime();
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -239,6 +240,6 @@ function callEndSurvey(){
 
 function clearTimeCountdown(){
     $('#countdown-timer').text('');
-    clearInterval(timer_countdown);
+    clearInterval(timeCountdown);
     $('#countdown-content').css('visibility', 'hidden');
 }

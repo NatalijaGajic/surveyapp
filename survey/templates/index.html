@@ -10,15 +10,17 @@
 <script src="static/js/survey.js" type="text/javascript"></script>
 {{steps|json_script:"steps"}}
 {{code|json_script:"code"}}
+{{seconds_per_conversation|json_script:"seconds_per_conversation"}}
 <script type="text/javascript">
     var steps = JSON.parse(document.getElementById('steps').textContent);
-    var code = JSON.parse(document.getElementById('code').textContent);
+    const code = JSON.parse(document.getElementById('code').textContent);
+    const SECONDS_PER_CONVERSATION = JSON.parse(document.getElementById('seconds_per_conversation').textContent);
 </script>
 </head>
 
 <div id="countdown-content" style="display: flex; justify-content: end; position: fixed; width: 100%; visibility: hidden;">
-    <div style="border-width: 1px; border-style: solid; border-color:rgba(0, 0, 0, 0.6); border-right: 0px; padding: 0.6rem 1rem 0.6rem 1rem; border-radius: 0 0 0 0.375rem;">
-        <i class="fas fa-clock fa-lg" style="color: #e74c3c; padding-right: 0.5rem;"></i><span id="countdown-timer" style="color: #e74c3c; font-size: large;"></span>
+    <div style=" padding: 0.6rem 1rem 0.6rem 1rem; border-radius: 0.375rem 0 0 0.375rem;background-color: #e74c3c;">
+        <i class="fas fa-clock fa-lg" style="color: #fff; padding-right: 0.5rem;"></i><span id="countdown-timer" style="color: #fff; font-size: large;"></span>
     </div>
 </div>
 
@@ -32,11 +34,11 @@
         <div class="card border-primary">
             <div class="card-body container">
                 {{for conversation}}
-                <div class="row" style="display: flex; justify-content: flex-start;">
-                    <div class="col-1">Q:</div><div class="card-text col-11">{{>question}}</div>
+                <div class="row" style="display: flex; justify-content: flex-start; padding-top:1rem;">
+                    <div class="col-1" style="padding-left:1rem;">Q:</div><div class="card-text col-11" style="padding-right:3rem; text-align:justify;">{{>question}}</div>
                 </div>
-                <div class="row" style="display: flex; justify-content: flex-start;">
-                    <div class="col-1">A:</div><div class="card-text col-11">{{>answer}}</div>
+                <div class="row" style="display: flex; justify-content: flex-start; padding-top:1rem; padding-bottom:1rem;">
+                    <div class="col-1" style="padding-left:1rem;">A:</div><div class="card-text col-11" style="padding-right:3rem; text-align:justify;">{{>answer}}</div>
                 </div>
                 {{/for}}
             </div>
@@ -85,14 +87,18 @@
     {% verbatim %}
     <div>
     <div class="card border-primary">
-        <div class="card-body container">
+        <div class="card-body container" style="padding-left:1rem; padding-right:3rem; text-align:justify;">
             <ul>
-                <li>You will be presented with five conversations consisting of five questions and answers. </li> 
-                <li>In each conversation, answers are either human-generated or machine-generated. </li>
-                <li>Conversations are picked at random, there is no predefined number of conversations with answers given by human or machine.</li>
-                <li>For each conversation, you will have 5 minutes to give a decision whether the answers were given by a human or ChatGPT.</li> 
-                <li>You will rate the conversation from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated. </li>
-                <li>After the rating of each conversation, you will be asked to provide a reason for your rating. After giving a reason, you will be presented with the next conversation.</li>
+                <li style="margin-bottom:0.5rem;">You will be presented with three conversations consisting of five questions and answers.</li> 
+                <li style="margin-bottom:0.5rem;">In each conversation, answers are either human-generated or machine-generated.
+                </li>
+                <li style="margin-bottom:0.5rem;">Human-generated answers were provided by people with a job position in the field of software developement.
+                    Machine-generated answers were provided by ChatGPT.
+                </li>
+                <li style="margin-bottom:0.5rem;">Conversations are picked at random, the ration of human-generated and machine-generated conversations is undefined.</li>
+                <li style="margin-bottom:0.5rem;">For each conversation, you will have 5 minutes to make a decision whether the answers were given by a human or ChatGPT.</li> 
+                <li style="margin-bottom:0.5rem;">You will be asked to rate the conversation on a scale from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated. </li>
+                <li style="margin-bottom:0.5rem;">After rating of each conversation, you will be asked to provide a reason for your rating. After giving a reason, you will be presented with the next conversation.</li>
             </ul>
         </div>
     </div>

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed, HttpResponseBadRequest, JsonResponse
+from django.conf import settings
 
 from .services.survey_service import get_user_by_code, get_survey_steps_to_show, get_start_survey_data, start_survey_by_user, \
     get_rate_conversation_data, rate_conversation_by_user, get_give_reason_data, give_reason_by_user, get_end_survey_data, \
@@ -15,10 +16,10 @@ def index(request):
         return HttpResponseForbidden()
     
     if user['survey_done']:
-        return render(request, 'index.html', context = {'steps': [{'type': 'end'}], 'code': code})
+        return render(request, 'index.html', context = {'steps': [{'type': 'end'}], 'code': code, 'seconds_per_conversation': settings.SECONDS_PER_CONVERSATION})
     
     survey_steps = get_survey_steps_to_show(code)
-    return render(request, 'index.html', context = {'steps': survey_steps, 'code': code})
+    return render(request, 'index.html', context = {'steps': survey_steps, 'code': code, 'seconds_per_conversation': settings.SECONDS_PER_CONVERSATION})
 
 
 def start_survey(request):
