@@ -19,11 +19,23 @@
 </script>
 </head>
 
-<div id="countdown-content" style="display: flex; justify-content: end; position: fixed; width: 100%; visibility: hidden;">
+<div id="countdown-content" style="display: flex; justify-content: end; position: fixed; width: 100%; visibility: hidden; z-index:100;">
     <div style=" padding: 0.6rem 1rem 0.6rem 1rem; border-radius: 0.375rem 0 0 0.375rem;background-color: #e74c3c;">
         <i class="fas fa-clock fa-lg" style="color: #fff; padding-right: 0.5rem;"></i><span id="countdown-timer" style="color: #fff; font-size: large;"></span>
     </div>
 </div>
+
+<div id="countdown-alert" style="display: flex; justify-content: center; position: fixed; width: 100%; visibility: hidden; z-index:100;">
+    <div class="alert alert-dismissible alert-danger" style="position:fixed; top:0;  z-index: 10;">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" fdprocessedid="c3h56"></button>
+        <strong>
+            Less than 30 seconds left for rating. 
+            Your rating is saved only if the "Finish rating" button is pressed.
+        </strong>
+    </div>
+</div>
+
+
 
 <div id="content" style="padding: 5% 10% 10% 10%">
     <!--JS render-->
@@ -32,6 +44,8 @@
 <script id="rating-conversation-template" type="text/x-jsrender">
     {% verbatim %}
     <div>
+        
+
         <div class="card border-primary">
             <div class="card-body container">
                 {{for conversation}}
@@ -54,12 +68,15 @@
                         <div class="col-11">Rate the previous conversation from 1-4 where 1 means that answers are human-generated and 4 means that answers are machine-generated.</div>
                     </div>
                     <div class="row">
+                        <div class="col-3" style="display: flex; justify-content: center;"></div>
                         <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios1">1</label></div>
                         <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios2">2</label></div>
                         <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios3">3</label></div>
                         <div class="col" style="display: flex; justify-content: center;"><label class="form-check-label" style="margin-right: 1em;" for="optionsRadios4">4</label></div>
+                        <div class="col-3" style="display: flex; justify-content: center;"></div>
                     </div>
                     <div class="row">
+                        <div class="col-3" style="display: flex; justify-content: right;">human</div>
                         <div class="form-check col" style="display: flex; justify-content: center;">
                             <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios1" value="1">
                         </div>
@@ -72,6 +89,7 @@
                         <div class="form-check col" style="display: flex; justify-content: center;" >
                             <input class="form-check-input" style="border-color: slategrey" type="radio" name="rating" id="optionsRadios4" value="4">
                         </div>
+                        <div class="col-3" style="display: flex; justify-content: left;">machine</div>
                     </div>
                 </div>
             </div>
@@ -93,13 +111,13 @@
                 <li style="margin-bottom:0.5rem;">You will be presented with three conversations consisting of five questions and answers.</li> 
                 <li style="margin-bottom:0.5rem;">A conversation is either human- or machine-generated.
                 </li>
-                <li style="margin-bottom:0.5rem;">Human-generated answers were provided by people with a job position in the field of software developement.
+                <li style="margin-bottom:0.5rem;">Human-generated answers were provided by people with a job position in the field of software development.
                     Machine-generated answers were provided by ChatGPT.
                 </li>
-                <li style="margin-bottom:0.5rem;">Conversations are picked at random, the ration of human-generated and machine-generated conversations is undefined.</li>
+                <li style="margin-bottom:0.5rem;">Conversations are picked at random, the ratio of human-generated and machine-generated conversations is undefined.</li>
                 <li style="margin-bottom:0.5rem;">Each conversation will be displayed for 5 minutes. 
                     As long as the conversation is displayed, you will be able to rate the conversation.
-                    Rating implies making a decision whether the answers were provided by a human or ChatGPT.
+                    Rating implies deciding whether the answers were provided by a human or ChatGPT.
                     There will be a timer in the upper right corner of your screen counting down the time you have left.
                 </li>
                 <li style="margin-bottom:0.5rem;">     
@@ -125,8 +143,12 @@
     {% verbatim %}
     <div>
     <div class="card border-primary">
-        <div class="card-body container">
-            <label for="exampleTextarea" class="form-label">What is your reason for the rating of the previous conversation?</label>
+        <div class="card-body container" style="padding-left:1rem; padding-right:1rem; text-align:justify;">
+            <label for="exampleTextarea" class="form-label">
+                What is your reason for the rating of the previous conversation? 
+                You can take your time, there is no time limit for giving a reason. 
+                You can give your reason in English or in Serbian.
+            </label>
             <textarea id="reason-text" class="form-control" id="exampleTextarea" rows="5"></textarea>
         </div>
     </div>

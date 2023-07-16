@@ -103,6 +103,9 @@ function showTimeCountdownUntil(end_time){
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+        if (seconds == 30 && minutes == 0){
+            $('#countdown-alert').css('visibility', 'visible');
+        }
         
         if (distance <= 0){
             $('#countdown-timer').text('00:00');
