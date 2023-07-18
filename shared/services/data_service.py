@@ -14,6 +14,14 @@ class DataService():
         conversations_df = pd.read_excel(settings.CONVERSATIONS_PATH)
         return conversations_df['code'].to_numpy()
     
+    def get_human_conversations(self):
+        conversations_df = pd.read_excel(settings.CONVERSATIONS_PATH)
+        return conversations_df.loc[conversations_df['class'] == 1]['code'].to_numpy()
+
+    def get_machine_conversations(selft):
+        conversations_df = pd.read_excel(settings.CONVERSATIONS_PATH)
+        return conversations_df.loc[conversations_df['class'] == 4]['code'].to_numpy()
+    
     def create_user_survey(self, conversations, code):
         user_survey_df = pd.DataFrame(columns=self.user_survey_columns)
         user_survey_df['conversation'] = conversations

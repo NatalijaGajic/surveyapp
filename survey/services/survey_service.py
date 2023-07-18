@@ -2,6 +2,7 @@
 import numpy as np
 from datetime import datetime
 import json
+import random
 
 from django.conf import settings
 from shared.services.data_service import DataService
@@ -14,10 +15,23 @@ def create_survey_for_user(user_code):
 
 
 def get_random_conversations(service):
-    conversations = service.get_conversations()
+    human_conversations = service.get_human_conversations()
+    machine_conversations = service.get_machine_conversations()
     num_of_conversations_per_survey = settings.NUM_OF_CONVERSATIONS_PER_SURVEY
-    np.random.shuffle(conversations)
-    return conversations[:num_of_conversations_per_survey]
+    np.random.shuffle(human_conversations)
+    np.random.shuffle(machine_conversations)
+
+    conversations_h = human_conversations[:num_of_conversations_per_survey-1]
+    conversation_m = machine_conversations[:1][0]
+
+    rand_order_of_conversation_m = random.randint(0, num_of_conversations_per_survey-1)
+
+    conversations = []
+    
+    conversations.extend(conversations_h)
+    conversations.insert(rand_order_of_conversation_m, conversation_m)
+
+    return conversations
 
 
 def get_user_by_code(code):
