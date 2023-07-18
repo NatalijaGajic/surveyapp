@@ -18,7 +18,7 @@ def get_registration_data(request):
         payload = json.loads(request.body)
         first_name, last_name, email = payload['first_name'], payload['last_name'], payload['email']
         registration_time = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-        return True, [first_name, last_name, registration_time, email]
+        return True, [first_name, last_name, email, registration_time]
     except:
         return False, []
 
