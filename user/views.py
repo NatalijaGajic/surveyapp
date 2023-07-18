@@ -20,7 +20,9 @@ def register(request):
     try:
         success, registration_data = get_registration_data(request)
         if not success:
-            return Http404()
+            logger.error(prepare_request_log(request))
+            logger.exception("An error occurred")
+            return JsonResponse({'message': 'ERROR', 'content': {}})
     
         code = get_registration_code(registration_data)
         user = get_user_by_code(code)
